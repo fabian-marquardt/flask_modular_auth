@@ -17,7 +17,7 @@ class TestUserEntity(AbstractAuthEntity):
         self.username = username
 
 
-def test_entity_loader(**kwargs):
+def dummy_entity_loader(**kwargs):
     test_user_credentials = [
         (1, 'test_user', 'test_password', 'aeFiGh0mootoosohQueu')
     ]
@@ -61,7 +61,7 @@ class AuthProviderTestCase(unittest.TestCase):
 class BasicAuthProviderTestCase(AuthProviderTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.manager.register_auth_provider(BasicAuthProvider(test_entity_loader))
+        self.manager.register_auth_provider(BasicAuthProvider(dummy_entity_loader))
 
     def test_authenticate_without_authorization_header(self):
         with self.app.test_request_context('/'):
@@ -92,7 +92,7 @@ class BasicAuthProviderTestCase(AuthProviderTestCase):
 class KeyBasedAuthProviderTestCase(AuthProviderTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.manager.register_auth_provider(KeyBasedAuthProvider(test_entity_loader))
+        self.manager.register_auth_provider(KeyBasedAuthProvider(dummy_entity_loader))
 
     def test_authenticate_without_authorization_header(self):
         with self.app.test_request_context('/'):
@@ -123,11 +123,11 @@ class KeyBasedAuthProviderTestCase(AuthProviderTestCase):
 class SessionBasedAuthProviderTestCase(AuthProviderTestCase):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
-        self.manager.register_auth_provider(SessionBasedAuthProvider(test_entity_loader))
+        self.manager.register_auth_provider(SessionBasedAuthProvider(dummy_entity_loader))
 
         @self.app.route('/login')
         def login_view():
-            user = test_entity_loader(id=1)
+            user = dummy_entity_loader(id=1)
             self.manager.get_auth_providers()[0].login_entity(user)
             return 'Login successful!'
 
