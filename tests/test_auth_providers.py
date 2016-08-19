@@ -42,7 +42,7 @@ def dummy_entity_loader(**kwargs):
 
 class AuthProviderTestCase(unittest.TestCase):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(AuthProviderTestCase, self).__init__(*args, **kwargs)
         self.app = Flask(__name__)
         self.app.secret_key = b'\xcd\xe1c\xfb\xccz7\xf6\xff\xe1\x8b\xf4\xb2\xd14\x93\xc1<\x8e\xd4\x16\xa7\x15z'
         self.manager = AuthManager(app=self.app)
@@ -60,7 +60,7 @@ class AuthProviderTestCase(unittest.TestCase):
 
 class BasicAuthProviderTestCase(AuthProviderTestCase):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(BasicAuthProviderTestCase, self).__init__(*args, **kwargs)
         self.manager.register_auth_provider(BasicAuthProvider(dummy_entity_loader))
 
     def test_authenticate_without_authorization_header(self):
@@ -91,7 +91,7 @@ class BasicAuthProviderTestCase(AuthProviderTestCase):
 
 class KeyBasedAuthProviderTestCase(AuthProviderTestCase):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(KeyBasedAuthProviderTestCase, self).__init__(*args, **kwargs)
         self.manager.register_auth_provider(KeyBasedAuthProvider(dummy_entity_loader))
 
     def test_authenticate_without_authorization_header(self):
@@ -122,7 +122,7 @@ class KeyBasedAuthProviderTestCase(AuthProviderTestCase):
 
 class SessionBasedAuthProviderTestCase(AuthProviderTestCase):
     def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super(SessionBasedAuthProviderTestCase, self).__init__(*args, **kwargs)
         self.manager.register_auth_provider(SessionBasedAuthProvider(dummy_entity_loader))
 
         @self.app.route('/login')
