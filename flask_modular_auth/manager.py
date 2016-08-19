@@ -35,7 +35,7 @@ class AuthManager:
         Register an authentication provider with the manager.
         :param auth_provider: A valid authentication provider (i.e. an instance of a subclass of AbstractAuthenticationProvider)
         """
-        if type(auth_provider) == AbstractAuthProvider:
+        if auth_provider.__class__ == AbstractAuthProvider:
             raise RuntimeError('Tried to add AbstractAuthProvider. Please add an implementing subclass object instead.')
         elif not isinstance(auth_provider, AbstractAuthProvider):
             raise ValueError('Tried to add an object which is no valid AuthProvider. Object should be instantiated from a subclass of AbstractAuthProvider.')
