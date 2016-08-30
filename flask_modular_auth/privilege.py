@@ -19,3 +19,8 @@ class RolePrivilege(AbstractPrivilege):
 
     def check(self):
         return self._role_name in current_authenticated_entity.get_roles()
+
+
+class AuthenticatedPrivilege(AbstractPrivilege):
+    def check(self):
+        return current_authenticated_entity.is_authenticated

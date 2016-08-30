@@ -41,7 +41,7 @@ class SessionBasedAuthProvider(AbstractAuthProvider):
 
         :param entity: Should be an instance of :class:`AbstractAuthEntity`. Must provide ``id`` as an attribute or property, since this value will be saved to the session cookie for reference.
         """
-        session[self._entity_cookie_name] = entity.id
+        session[self._entity_cookie_name] = entity.get_id()
 
     def logout_entity(self):
         """ This method should be called when you want to terminate an active session (e.g. once a client accesses the logout view of your application). It does not need the currently authenticated

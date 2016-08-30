@@ -1,12 +1,15 @@
 from .abstract import AbstractAuthProvider, AbstractUnauthenticatedEntity
 from .utils import _context_processor
-from flask import _request_ctx_stack
+from flask import _request_ctx_stack, has_request_context
 
 
 class AuthManager:
-    def __init__(self, app=None, unauthorized_callback=None):
+    def __init__(self, app=None, unauthorized_callback=None, unauthenticated_entity_class=None):
         self._auth_providers = []
-        self.unauthenticated_entity_class = AbstractUnauthenticatedEntity
+        if unauthenticated_entity_class:
+            self._unauthenticated_entity_class = unauthenticated_entity_class
+        else:
+            self._unauthenticated_entity_class = AbstractUnauthenticatedEntity
         self._unauthorized_callback = unauthorized_callback
 
         if app is not None:
@@ -16,8 +19,13 @@ class AuthManager:
         app.auth_manager = self
         app.context_processor(_context_processor)
 
+    def set_unauthenticated_entity_class(self, unauthenticated_entity_class):
+        self._unauthenticated_entity_class = unauthenticated_entity_class
+
     def unauthorized(self):
-        if self._unauthorized_callback:
+        if has_request_context() and hasattr(_request_ctx_stack.top, 'unauthorized_callback'):
+            return _request_ctx_stack.top.unauthorized_callback()
+        elif self._unauthorized_callback:
             return self._unauthorized_callback()
         else:
             return 'Not authorized', 403
@@ -51,5 +59,5 @@ class AuthManager:
             if entity:
                 ctx.authenticated_entity = entity
                 return True
-        ctx.authenticated_entity = self.unauthenticated_entity_class()
+        ctx.authenticated_entity = self._unauthenticated_entity_class()
         return False
