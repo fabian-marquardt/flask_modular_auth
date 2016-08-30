@@ -12,6 +12,9 @@ class TestUserEntity(AbstractAuthEntity):
     def get_roles(self):
         return ['test']
 
+    def get_id(self):
+        return self.id
+
     def __init__(self, id, username):
         self.id = id
         self.username = username
