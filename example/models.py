@@ -11,6 +11,9 @@ class User(db.Model, AbstractAuthEntity):
             roles.append('admin')
         return roles
 
+    def get_id(self):
+        return self.id
+
     @property
     def is_authenticated(self):
         return True
